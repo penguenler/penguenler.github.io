@@ -1,0 +1,1449 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rico</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Manrope:wght@400;500;700&display=swap");
+
+    :root {
+      --bg: #f4efe8;
+      --bg-2: #e9dfd3;
+      --ink: #14232e;
+      --ink-soft: #4f6573;
+      --panel: rgba(255, 255, 255, 0.86);
+      --line: rgba(20, 35, 46, 0.14);
+      --accent: #00798c;
+      --accent-2: #ef8354;
+      --accent-3: #163c53;
+      --ok: #13825f;
+      --warn: #b14d3c;
+      --shadow: 0 16px 42px rgba(20, 35, 46, 0.14);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(90vw 55vh at -12% -20%, rgba(239, 131, 84, 0.35), transparent 60%),
+        radial-gradient(90vw 60vh at 112% -18%, rgba(0, 121, 140, 0.26), transparent 62%),
+        linear-gradient(170deg, var(--bg) 0%, #f8f4ed 44%, var(--bg-2) 100%);
+    }
+
+    .app {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .topbar {
+      position: relative;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(0, 121, 140, 0.12), rgba(239, 131, 84, 0.12)) top/100% 4px no-repeat,
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 249, 241, 0.86));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+      overflow: hidden;
+      animation: rise 0.55s ease;
+    }
+
+    .topbar::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      right: -64px;
+      top: -66px;
+      border-radius: 50%;
+      background: conic-gradient(from 210deg, rgba(0, 121, 140, 0.27), rgba(239, 131, 84, 0.31), rgba(22, 60, 83, 0.25));
+      filter: blur(8px);
+      pointer-events: none;
+    }
+
+    .brandline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Archivo", sans-serif;
+      font-size: clamp(1.4rem, 2.8vw, 2.55rem);
+      line-height: 1.04;
+      letter-spacing: 0.2px;
+      max-width: 760px;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--ink-soft);
+      max-width: 840px;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stamp {
+      border-radius: 999px;
+      border: 1px solid rgba(0, 121, 140, 0.28);
+      background: rgba(0, 121, 140, 0.11);
+      color: #0d6471;
+      font-size: 0.83rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .lang-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 5px 7px 5px 10px;
+    }
+
+    .lang-chip label {
+      font-size: 0.72rem;
+      margin: 0;
+      letter-spacing: 0.4px;
+      color: #385462;
+    }
+
+    .lang-chip select {
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      padding: 4px 10px;
+      min-width: 92px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      background: #fff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(5px);
+    }
+
+    .controls {
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+      animation: rise 0.62s ease;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.inline {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+
+    input[type="search"],
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--ink);
+      border-radius: 12px;
+      padding: 10px 11px;
+      font: inherit;
+      outline: none;
+      transition: transform 0.15s ease, border-color 0.2s ease;
+    }
+
+    input[type="search"]:focus,
+    select:focus {
+      border-color: rgba(0, 121, 140, 0.62);
+      transform: translateY(-1px);
+    }
+
+    .seg {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.84);
+      padding: 4px;
+      gap: 4px;
+      width: fit-content;
+      max-width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .seg button {
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink-soft);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .seg button.active {
+      background: linear-gradient(130deg, var(--accent), var(--accent-3));
+      color: #fff;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    }
+
+    .checkbox {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 0.86rem;
+      color: var(--ink-soft);
+      user-select: none;
+    }
+
+    .checkbox input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--accent);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      animation: rise 0.7s ease;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 12px;
+    }
+
+    .stat::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      opacity: 0.45;
+    }
+
+    .stat .k {
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      font-size: 0.73rem;
+      letter-spacing: 0.7px;
+      font-weight: 800;
+    }
+
+    .stat .v {
+      margin-top: 5px;
+      font-size: 1.24rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .stat .sub {
+      margin-top: 4px;
+      color: #566f7d;
+      font-size: 0.83rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: 1fr;
+    }
+
+    .head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 13px 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .head h2 {
+      margin: 0;
+      font-family: "Archivo", sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.2px;
+    }
+
+    .mini {
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .cards {
+      padding: 10px;
+      display: grid;
+      gap: 9px;
+      max-height: 560px;
+      overflow: auto;
+      align-content: start;
+    }
+
+    .item {
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.93);
+      padding: 10px;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.16s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      animation: rise 0.44s ease both;
+      animation-delay: var(--delay, 0ms);
+    }
+
+    .item:hover {
+      transform: translateY(-2px);
+      border-color: rgba(0, 121, 140, 0.5);
+      box-shadow: 0 10px 24px rgba(22, 60, 83, 0.14);
+    }
+
+    .item.active {
+      border-color: rgba(0, 121, 140, 0.78);
+      background: linear-gradient(145deg, rgba(0, 121, 140, 0.1), rgba(255, 255, 255, 0.95));
+    }
+
+    .item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .city {
+      font-size: 0.93rem;
+      font-weight: 800;
+      color: #193644;
+      letter-spacing: 0.15px;
+    }
+
+    .code {
+      font-size: 0.78rem;
+      color: #5d7380;
+      border: 1px dashed rgba(20, 35, 46, 0.28);
+      border-radius: 999px;
+      padding: 3px 8px;
+    }
+
+    .item-mid {
+      margin-top: 7px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .fuel-name {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.77rem;
+      font-weight: 800;
+      color: #57707d;
+    }
+
+    .amount {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #173342;
+    }
+
+    .meter {
+      margin-top: 8px;
+      width: 100%;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(20, 35, 46, 0.09);
+      overflow: hidden;
+    }
+
+    .meter>span {
+      display: block;
+      height: 100%;
+      width: var(--w, 0%);
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .details {
+      padding: 10px;
+      max-height: 560px;
+      overflow: auto;
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .selected {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 12px;
+    }
+
+    .selected h3 {
+      margin: 0;
+      font-size: 1.09rem;
+      font-family: "Archivo", sans-serif;
+      letter-spacing: 0.15px;
+    }
+
+    .selected p {
+      margin: 7px 0 0;
+      color: #566f7d;
+      font-size: 0.87rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.96);
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      color: #0e4f5e;
+      background: linear-gradient(180deg, rgba(0, 121, 140, 0.15), rgba(0, 121, 140, 0.07));
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+      color: #223d4b;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .badge {
+      margin-left: 6px;
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 0.71rem;
+      font-weight: 800;
+      border: 1px solid rgba(19, 130, 95, 0.3);
+      color: var(--ok);
+      background: rgba(19, 130, 95, 0.12);
+    }
+
+    .hint,
+    .empty {
+      border: 1px dashed rgba(20, 35, 46, 0.25);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.75);
+      color: #5b727f;
+      padding: 14px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (min-width: 980px) {
+      .layout {
+        grid-template-columns: 300px 1fr;
+      }
+
+      .controls {
+        position: sticky;
+        top: 18px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 979px) {
+      .field.inline {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .cards,
+      .details {
+        max-height: none;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brandline">
+        <h1 class="title" data-i18n="title"></h1>
+        <div class="top-actions">
+          <div class="lang-chip">
+            <label for="languageSelect" data-i18n="language"></label>
+            <select id="languageSelect">
+              <option value="tr">Turkce</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="stamp" id="stamp"></div>
+        </div>
+      </div>
+      <!-- <p class="subtitle" data-i18n="subtitle"></p> -->
+    </header>
+
+    <main class="layout">
+      <aside class="panel controls">
+        <div class="field">
+          <label for="search" data-i18n="citySearch"></label>
+          <input id="search" type="search" data-i18n-placeholder="citySearchPlaceholder" />
+        </div>
+
+        <div class="field">
+          <label for="sortSelect" data-i18n="sort"></label>
+          <select id="sortSelect">
+            <option value="asc"></option>
+            <option value="desc"></option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="brandSelect" data-i18n="brand"></label>
+          <select id="brandSelect"></select>
+        </div>
+
+        <div class="field">
+          <label for="snapshotSelect" data-i18n="snapshot"></label>
+          <select id="snapshotSelect"></select>
+        </div>
+
+        <div class="field">
+          <label data-i18n="fuel"></label>
+          <div class="seg" id="fuelSeg">
+            <button type="button" data-fuel="gasolineAmount" class="active"></button>
+            <button type="button" data-fuel="dieselAmount"></button>
+            <button type="button" data-fuel="lpgAmount"></button>
+          </div>
+        </div>
+
+        <label class="checkbox">
+          <input id="onlyComplete" type="checkbox" />
+          <span data-i18n="onlyComplete"></span>
+        </label>
+      </aside>
+
+      <section class="content">
+        <section class="stats" id="stats"></section>
+
+        <section class="grid">
+          <article class="panel">
+            <div class="head">
+              <h2 data-i18n="ranking"></h2>
+              <span class="mini" id="listMeta"></span>
+            </div>
+            <div class="cards" id="cards"></div>
+          </article>
+
+          <article class="panel">
+            <div class="head">
+              <h2 data-i18n="details"></h2>
+            </div>
+            <div class="details" id="details"></div>
+          </article>
+        </section>
+
+        <article class="panel" id="historyPanel" style="display:none">
+          <div class="head">
+            <h2 data-i18n="priceHistory"></h2>
+            <span class="mini" id="historyMeta"></span>
+          </div>
+          <div style="padding:10px;position:relative;height:320px;">
+            <canvas id="historyChart"></canvas>
+          </div>
+          <div style="padding:10px" id="historyContent"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Replace this with the URL you want to read live price data from.
+    const PRICE_DATA_URL = "https://raw.githubusercontent.com/penguenler/rico-data/refs/heads/main/prices.json";
+    const ALL_PRICES_URL = "https://raw.githubusercontent.com/penguenler/rico-data/refs/heads/main/allprices.json";
+
+    const I18N = {
+      tr: {
+        title: "rico",
+        subtitle: "",
+        citySearch: "Sehir ara",
+        citySearchPlaceholder: "Sehir adi veya kod girin",
+        language: "Dil",
+        sort: "Siralama",
+        sortAsc: "Dusukten yuksege",
+        sortDesc: "Yuksekten dusuge",
+        brand: "Marka",
+        fuel: "Yakit",
+        gasoline: "Benzin",
+        diesel: "Motorin",
+        lpg: "LPG",
+        onlyComplete: "Eksiksiz veri olan sehirleri goster",
+        controlHint: "Ipuclari: Marka ve yakit tipi secimini degistirerek fiyat farklarini aninda gor.",
+        ranking: "Sehir Siralamasi",
+        details: "Secili Sehir",
+        detailsMini: "Tum markalar",
+        results: "sonuc",
+        averageFuel: "Ortalama {fuel}",
+        cheapestCity: "En uygun sehir",
+        spread: "Fiyat araligi",
+        validCities: "Gecerli sehir",
+        maxLabel: "Maks",
+        noData: "Veri yok",
+        noMatch: "Aramaya uygun sehir bulunamadi.",
+        pickCity: "Tum markalari karsilastirmak icin listeden bir sehir secin.",
+        best: "BEST",
+        bestNote: "BEST etiketi ilgili yakit turunde en dusuk mevcut fiyati gosterir.",
+        detailHint: "Yakit tipi degistirerek farkli senaryolari hizli inceleyebilirsin.",
+        lastUpdate: "Son guncelleme",
+        noUpdate: "Guncelleme bilgisi yok",
+        error: "Veri okunamadi. PRICE_DATA_URL degerini kontrol et veya sayfayi sunucu uzerinden ac.",
+        na: "Yok",
+        snapshot: "Tarih secimi",
+        snapshotLatest: "Guncel",
+        priceHistory: "Fiyat Gecmisi",
+        historyMini: "Tum kayitlar",
+        noHistory: "Gecmis veri bulunamadi.",
+        date: "Tarih",
+        change: "Degisim",
+        previous: "Onceki",
+        next: "Sonraki",
+        page: "Sayfa"
+      },
+      en: {
+        title: "rico",
+        subtitle: "",
+        citySearch: "City search",
+        citySearchPlaceholder: "Type city name or code",
+        language: "Language",
+        sort: "Sort",
+        sortAsc: "Lowest to highest",
+        sortDesc: "Highest to lowest",
+        brand: "Brand",
+        fuel: "Fuel",
+        gasoline: "Gasoline",
+        diesel: "Diesel",
+        lpg: "LPG",
+        onlyComplete: "Show only complete data",
+        controlHint: "Tips: switch brand and fuel type to reveal price gaps instantly.",
+        ranking: "City Ranking",
+        details: "Selected City",
+        detailsMini: "All brands",
+        results: "results",
+        averageFuel: "Average {fuel}",
+        cheapestCity: "Cheapest city",
+        spread: "Price spread",
+        validCities: "Valid cities",
+        maxLabel: "Max",
+        noData: "No data",
+        noMatch: "No city matches your search.",
+        pickCity: "Select a city from the ranking to compare all brands.",
+        best: "BEST",
+        bestNote: "BEST badge marks the lowest available price for that fuel type.",
+        detailHint: "Change fuel type to inspect different scenarios quickly.",
+        lastUpdate: "Last update",
+        noUpdate: "Update info not available",
+        error: "Could not read data. Check PRICE_DATA_URL or serve this page through a web server.",
+        na: "N/A",
+        snapshot: "Select date",
+        snapshotLatest: "Latest",
+        priceHistory: "Price History",
+        historyMini: "All records",
+        noHistory: "No historical data found.",
+        date: "Date",
+        change: "Change",
+        previous: "Previous",
+        next: "Next",
+        page: "Page"
+      }
+    };
+
+    const BRAND_LABELS = {
+      shell: "Shell",
+      opet: "Opet",
+      petrolOfisi: "Petrol Ofisi",
+      totalEnergies: "TotalEnergies"
+    };
+
+    const state = {
+      raw: null,
+      provinces: [],
+      brands: [],
+      selectedBrand: "shell",
+      selectedFuel: "gasolineAmount",
+      sort: "asc",
+      query: "",
+      selectedProvinceKey: null,
+      onlyComplete: false,
+      lang: "tr",
+      history: [],
+      snapshotIndex: -1,
+      historyPage: 1,
+      historyPageSize: 20
+    };
+
+    function tr(key, vars = {}) {
+      const dict = I18N[state.lang] || I18N.tr;
+      let text = dict[key] || I18N.en[key] || key;
+      Object.entries(vars).forEach(([k, v]) => {
+        text = text.replaceAll("{" + k + "}", String(v));
+      });
+      return text;
+    }
+
+    function fuelLabel(key) {
+      if (key === "gasolineAmount") return tr("gasoline");
+      if (key === "dieselAmount") return tr("diesel");
+      return tr("lpg");
+    }
+
+    function getAmount(province, brand, fuel) {
+      return province?.prices?.[brand]?.[fuel] ?? null;
+    }
+
+    function isFiniteNumber(value) {
+      return Number.isFinite(value);
+    }
+
+    function formatNumber(value) {
+      const locale = state.lang === "tr" ? "tr-TR" : "en-US";
+      return new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    }
+
+    function formatAmount(value) {
+      return isFiniteNumber(value) ? formatNumber(value) + " TL/L" : tr("na");
+    }
+
+    function getProvinces() {
+      if (state.snapshotIndex >= 0 && state.history[state.snapshotIndex]) {
+        return state.history[state.snapshotIndex].provinces || [];
+      }
+      return state.provinces;
+    }
+
+    function provinceKey(province) {
+      return province.provinceCode + "|" + province.provinceName;
+    }
+
+    function allFuelAvailable(province) {
+      const fuels = ["gasolineAmount", "dieselAmount", "lpgAmount"];
+      return fuels.every((fuel) => isFiniteNumber(getAmount(province, state.selectedBrand, fuel)));
+    }
+
+    function getVisibleItems() {
+      const q = state.query.trim().toUpperCase();
+
+      return getProvinces()
+        .filter((p) => {
+          if (q && !p.provinceName.includes(q) && !p.provinceCode.includes(q)) {
+            return false;
+          }
+          if (state.onlyComplete && !allFuelAvailable(p)) {
+            return false;
+          }
+          return true;
+        })
+        .map((p) => {
+          const value = getAmount(p, state.selectedBrand, state.selectedFuel);
+          return {
+            province: p,
+            value: isFiniteNumber(value) ? value : Infinity
+          };
+        })
+        .sort((a, b) => {
+          if (!isFiniteNumber(a.value) && !isFiniteNumber(b.value)) {
+            return a.province.provinceName.localeCompare(b.province.provinceName);
+          }
+          if (!isFiniteNumber(a.value)) return 1;
+          if (!isFiniteNumber(b.value)) return -1;
+
+          const diff = state.sort === "asc" ? a.value - b.value : b.value - a.value;
+          if (Math.abs(diff) > 0.0001) return diff;
+          return a.province.provinceName.localeCompare(b.province.provinceName);
+        });
+    }
+
+    function bestBrand(province, fuel) {
+      const options = state.brands
+        .map((brand) => ({ brand, amount: getAmount(province, brand, fuel) }))
+        .filter((x) => isFiniteNumber(x.amount));
+
+      if (!options.length) return null;
+      options.sort((a, b) => a.amount - b.amount);
+      return options[0].brand;
+    }
+
+    function renderStaticText() {
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        el.textContent = tr(el.dataset.i18n);
+      });
+
+      document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+        el.setAttribute("placeholder", tr(el.dataset.i18nPlaceholder));
+      });
+
+      const sortSelect = document.getElementById("sortSelect");
+      sortSelect.options[0].textContent = tr("sortAsc");
+      sortSelect.options[1].textContent = tr("sortDesc");
+
+      document.querySelectorAll("#fuelSeg button").forEach((btn) => {
+        btn.textContent = fuelLabel(btn.dataset.fuel);
+      });
+
+      document.documentElement.lang = state.lang;
+      document.title = tr("title");
+      const snapshotSelect = document.getElementById("snapshotSelect");
+      if (snapshotSelect && snapshotSelect.options.length > 0) {
+        snapshotSelect.options[0].textContent = tr("snapshotLatest");
+      }
+    }
+
+    function renderStamp() {
+      const stamp = document.getElementById("stamp");
+      let ts;
+      if (state.snapshotIndex >= 0 && state.history[state.snapshotIndex]) {
+        ts = state.history[state.snapshotIndex].generatedAt?.formatted;
+      } else {
+        ts = state.raw?.generatedAt?.formatted;
+      }
+      stamp.textContent = ts ? tr("lastUpdate") + ": " + ts : tr("noUpdate");
+    }
+
+    function renderBrandOptions() {
+      const select = document.getElementById("brandSelect");
+      select.innerHTML = "";
+
+      state.brands.forEach((brand) => {
+        const option = document.createElement("option");
+        option.value = brand;
+        option.textContent = BRAND_LABELS[brand] || brand;
+        select.appendChild(option);
+      });
+
+      if (!state.brands.includes(state.selectedBrand)) {
+        state.selectedBrand = state.brands[0] || "shell";
+      }
+      select.value = state.selectedBrand;
+    }
+
+    function renderSnapshotOptions() {
+      const select = document.getElementById("snapshotSelect");
+      const currentValue = String(state.snapshotIndex);
+      select.innerHTML = "";
+
+      const latestOption = document.createElement("option");
+      latestOption.value = "-1";
+      latestOption.textContent = tr("snapshotLatest");
+      select.appendChild(latestOption);
+
+      for (let i = state.history.length - 1; i >= 0; i--) {
+        const snap = state.history[i];
+        const option = document.createElement("option");
+        option.value = String(i);
+        option.textContent = snap.generatedAt?.formatted || ("Snapshot " + (i + 1));
+        select.appendChild(option);
+      }
+
+      select.value = currentValue;
+      if (select.value !== currentValue) select.value = "-1";
+    }
+
+    function renderHistory() {
+      const panel = document.getElementById("historyPanel");
+      const content = document.getElementById("historyContent");
+      const meta = document.getElementById("historyMeta");
+      const canvas = document.getElementById("historyChart");
+
+      if (!state.history.length || !state.selectedProvinceKey) {
+        panel.style.display = "none";
+        return;
+      }
+
+      panel.style.display = "";
+      meta.textContent = state.history.length + " " + tr("results");
+
+      const selected = getProvinces().find((p) => provinceKey(p) === state.selectedProvinceKey);
+
+      // Prepare chart data for the currently selected brand only
+      // and collapse multiple intra-day snapshots into a single daily point.
+      const chartDataByDate = {};
+      state.history.forEach(function (snap) {
+        const prov = (snap.provinces || []).find(function (p) { return provinceKey(p) === state.selectedProvinceKey; });
+        if (!prov) return;
+
+        const dayKey = (snap.generatedAt && snap.generatedAt.day && snap.generatedAt.month && snap.generatedAt.year)
+          ? (snap.generatedAt.day + "." + snap.generatedAt.month + "." + snap.generatedAt.year)
+          : ((snap.generatedAt?.formatted || "?").split(" ")[0]);
+
+        // Overwrite same day so the last snapshot of that day is plotted.
+        chartDataByDate[dayKey] = {
+          gasolineAmount: getAmount(prov, state.selectedBrand, "gasolineAmount"),
+          dieselAmount: getAmount(prov, state.selectedBrand, "dieselAmount"),
+          lpgAmount: getAmount(prov, state.selectedBrand, "lpgAmount")
+        };
+      });
+
+      const dates = Object.keys(chartDataByDate).sort(function (a, b) {
+        const pa = a.split(".");
+        const pb = b.split(".");
+        if (pa.length !== 3 || pb.length !== 3) return a.localeCompare(b);
+        const da = new Date(Number(pa[2]), Number(pa[1]) - 1, Number(pa[0]));
+        const db = new Date(Number(pb[2]), Number(pb[1]) - 1, Number(pb[0]));
+        return da - db;
+      });
+      const gasolineAvg = dates.map(function (d) {
+        const value = chartDataByDate[d].gasolineAmount;
+        return isFiniteNumber(value) ? value : null;
+      });
+      const dieselAvg = dates.map(function (d) {
+        const value = chartDataByDate[d].dieselAmount;
+        return isFiniteNumber(value) ? value : null;
+      });
+      const lpgAvg = dates.map(function (d) {
+        const value = chartDataByDate[d].lpgAmount;
+        return isFiniteNumber(value) ? value : null;
+      });
+
+      const chartContainer = canvas.parentElement;
+      const hasGasolineData = gasolineAvg.some(isFiniteNumber);
+      const hasDieselData = dieselAvg.some(isFiniteNumber);
+      const hasLpgData = lpgAvg.some(isFiniteNumber);
+      const hasChartData = hasGasolineData || hasDieselData || hasLpgData;
+
+      // Destroy old chart if exists
+      if (window.historyChartInstance) {
+        window.historyChartInstance.destroy();
+        window.historyChartInstance = null;
+      }
+
+      if (hasChartData) {
+        chartContainer.style.display = "";
+        const datasets = [];
+
+        if (hasGasolineData) {
+          datasets.push({
+            label: fuelLabel("gasolineAmount"),
+            data: gasolineAvg,
+            borderColor: "rgba(239, 131, 84, 1)",
+            backgroundColor: "rgba(239, 131, 84, 0.1)",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          });
+        }
+
+        if (hasDieselData) {
+          datasets.push({
+            label: fuelLabel("dieselAmount"),
+            data: dieselAvg,
+            borderColor: "rgba(0, 121, 140, 1)",
+            backgroundColor: "rgba(0, 121, 140, 0.1)",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          });
+        }
+
+        if (hasLpgData) {
+          datasets.push({
+            label: fuelLabel("lpgAmount"),
+            data: lpgAvg,
+            borderColor: "rgba(19, 130, 95, 1)",
+            backgroundColor: "rgba(19, 130, 95, 0.1)",
+            borderWidth: 2,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          });
+        }
+
+        const ctx = canvas.getContext("2d");
+        window.historyChartInstance = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: dates,
+            datasets: datasets
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: "top",
+                labels: {
+                  usePointStyle: true,
+                  padding: 12,
+                  font: { size: 12, weight: "600" },
+                  color: "var(--ink-soft)"
+                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                ticks: { color: "var(--ink-soft)" },
+                grid: { color: "rgba(20, 35, 46, 0.05)" }
+              },
+              x: {
+                ticks: { color: "var(--ink-soft)" },
+                grid: { color: "rgba(20, 35, 46, 0.05)" }
+              }
+            }
+          }
+        });
+      } else {
+        chartContainer.style.display = "none";
+      }
+
+      // Render table
+      const heading = document.createElement("div");
+      heading.style.cssText = "font-size:0.85rem;font-weight:700;color:var(--ink-soft);padding:4px 2px 8px;text-transform:uppercase;letter-spacing:0.5px";
+      heading.textContent = (selected ? selected.provinceName + " \u2014 " : "") + (BRAND_LABELS[state.selectedBrand] || state.selectedBrand);
+
+      const table = document.createElement("table");
+      table.innerHTML =
+        "<thead><tr>" +
+        "<th>" + tr("date") + "</th>" +
+        "<th>" + fuelLabel("gasolineAmount") + "</th>" +
+        "<th>" + fuelLabel("dieselAmount") + "</th>" +
+        "<th>" + fuelLabel("lpgAmount") + "</th>" +
+        "</tr></thead><tbody></tbody>";
+
+      const tbody = table.querySelector("tbody");
+      const snapshots = [...state.history].reverse();
+      const citySnapshots = snapshots
+        .map(function (snap) {
+          const province = (snap.provinces || []).find(function (p) { return provinceKey(p) === state.selectedProvinceKey; });
+          if (!province) return null;
+          return { snap: snap, province: province };
+        })
+        .filter(Boolean);
+      const rows = [];
+
+      citySnapshots.forEach(function (entry, idx) {
+        const snap = entry.snap;
+        const province = entry.province;
+
+        const g = getAmount(province, state.selectedBrand, "gasolineAmount");
+        const d = getAmount(province, state.selectedBrand, "dieselAmount");
+        const l = getAmount(province, state.selectedBrand, "lpgAmount");
+
+        const prevEntry = citySnapshots[idx + 1] || null;
+        const prevProv = prevEntry ? prevEntry.province : null;
+
+        function diffHtml(current, fuel) {
+          if (!isFiniteNumber(current) || !prevProv) return "";
+          const prev = getAmount(prevProv, state.selectedBrand, fuel);
+          if (!isFiniteNumber(prev)) return "";
+          const diff = current - prev;
+          if (Math.abs(diff) < 0.001) return " <span style=\"color:var(--ink-soft);font-weight:700\">&#9679;</span>";
+          if (diff > 0) return " <span style=\"color:var(--warn);font-weight:800;background:rgba(177,77,60,0.12);padding:1px 6px;border-radius:999px\">&#9650; " + formatNumber(Math.abs(diff)) + "</span>";
+          return " <span style=\"color:var(--ok);font-weight:800;background:rgba(19,130,95,0.12);padding:1px 6px;border-radius:999px\">&#9660; " + formatNumber(Math.abs(diff)) + "</span>";
+        }
+
+        const row = document.createElement("tr");
+        row.innerHTML =
+          "<td>" + (snap.generatedAt?.formatted || "?") + "</td>" +
+          "<td>" + formatAmount(g) + diffHtml(g, "gasolineAmount") + "</td>" +
+          "<td>" + formatAmount(d) + diffHtml(d, "dieselAmount") + "</td>" +
+          "<td>" + formatAmount(l) + diffHtml(l, "lpgAmount") + "</td>";
+        rows.push(row);
+      });
+
+      if (!rows.length) {
+        content.innerHTML = "";
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = tr("noHistory");
+        content.appendChild(empty);
+        return;
+      }
+
+      const totalPages = Math.max(1, Math.ceil(rows.length / state.historyPageSize));
+      if (state.historyPage > totalPages) state.historyPage = totalPages;
+      if (state.historyPage < 1) state.historyPage = 1;
+
+      const start = (state.historyPage - 1) * state.historyPageSize;
+      const pageRows = rows.slice(start, start + state.historyPageSize);
+      pageRows.forEach(function (row) {
+        tbody.appendChild(row);
+      });
+
+      content.innerHTML = "";
+      content.appendChild(heading);
+      const wrap = document.createElement("div");
+      wrap.style.overflowX = "auto";
+      wrap.style.overflowY = "auto";
+      wrap.style.maxHeight = "360px";
+      wrap.appendChild(table);
+      content.appendChild(wrap);
+
+      const pager = document.createElement("div");
+      pager.style.cssText = "display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:8px";
+
+      const prevBtn = document.createElement("button");
+      prevBtn.type = "button";
+      prevBtn.textContent = tr("previous");
+      prevBtn.disabled = state.historyPage <= 1;
+      prevBtn.style.cssText = "border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer";
+      prevBtn.addEventListener("click", function () {
+        if (state.historyPage > 1) {
+          state.historyPage -= 1;
+          renderHistory();
+        }
+      });
+
+      const pageInfo = document.createElement("span");
+      pageInfo.style.cssText = "font-size:0.83rem;color:var(--ink-soft);font-weight:700";
+      pageInfo.textContent = tr("page") + " " + state.historyPage + " / " + totalPages;
+
+      const nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.textContent = tr("next");
+      nextBtn.disabled = state.historyPage >= totalPages;
+      nextBtn.style.cssText = "border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;cursor:pointer";
+      nextBtn.addEventListener("click", function () {
+        if (state.historyPage < totalPages) {
+          state.historyPage += 1;
+          renderHistory();
+        }
+      });
+
+      pager.appendChild(prevBtn);
+      pager.appendChild(pageInfo);
+      pager.appendChild(nextBtn);
+      content.appendChild(pager);
+    }
+
+    function renderStats(items) {
+      const root = document.getElementById("stats");
+      const valid = items.filter((x) => isFiniteNumber(x.value));
+      const avg = valid.length ? valid.reduce((sum, x) => sum + x.value, 0) / valid.length : null;
+      const min = valid.length ? valid[0] : null;
+      const max = valid.length ? valid[valid.length - 1] : null;
+      const spread = min && max ? max.value - min.value : null;
+
+      const cards = [
+        {
+          k: tr("averageFuel", { fuel: fuelLabel(state.selectedFuel) }),
+          v: isFiniteNumber(avg) ? formatAmount(avg) : tr("na"),
+          sub: tr("brand") + ": " + (BRAND_LABELS[state.selectedBrand] || state.selectedBrand) + " | " + tr("validCities") + ": " + valid.length
+        },
+        {
+          k: tr("cheapestCity"),
+          v: min ? min.province.provinceName : tr("na"),
+          sub: min ? formatAmount(min.value) : tr("noData")
+        },
+        {
+          k: tr("spread"),
+          v: spread !== null ? formatNumber(spread) + " TL/L" : tr("na"),
+          sub: max ? tr("maxLabel") + ": " + max.province.provinceName : tr("noData")
+        }
+      ];
+
+      root.innerHTML = "";
+      cards.forEach((card) => {
+        const el = document.createElement("div");
+        el.className = "stat";
+        el.innerHTML = '<div class="k">' + card.k + '</div><div class="v">' + card.v + '</div><div class="sub">' + card.sub + '</div>';
+        root.appendChild(el);
+      });
+    }
+
+    function renderList(items) {
+      const cards = document.getElementById("cards");
+      const meta = document.getElementById("listMeta");
+      meta.textContent = items.length + " " + tr("results");
+
+      cards.innerHTML = "";
+      if (!items.length) {
+        cards.innerHTML = '<div class="empty">' + tr("noMatch") + '</div>';
+        return;
+      }
+
+      const validValues = items.filter((x) => isFiniteNumber(x.value)).map((x) => x.value);
+      const min = validValues.length ? Math.min(...validValues) : 0;
+      const max = validValues.length ? Math.max(...validValues) : 1;
+      const spread = Math.max(max - min, 0.0001);
+
+      items.forEach((entry, idx) => {
+        const province = entry.province;
+        const amount = getAmount(province, state.selectedBrand, state.selectedFuel);
+        const active = state.selectedProvinceKey === provinceKey(province) ? " active" : "";
+        const width = isFiniteNumber(amount) ? ((amount - min) / spread) * 100 : 0;
+
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = "item" + active;
+        item.style.setProperty("--delay", Math.min(idx * 15, 350) + "ms");
+        item.innerHTML =
+          '<div class="item-top"><span class="city">' + province.provinceName + '</span><span class="code">' + province.provinceCode + '</span></div>' +
+          '<div class="item-mid"><span class="fuel-name">' + fuelLabel(state.selectedFuel) + '</span><span class="amount">' + formatAmount(amount) + '</span></div>' +
+          '<div class="meter"><span style="--w:' + width.toFixed(1) + '%"></span></div>';
+
+        item.addEventListener("click", () => {
+          state.selectedProvinceKey = provinceKey(province);
+          state.historyPage = 1;
+          state.query = "";
+          document.getElementById("search").value = "";
+          render();
+        });
+
+        cards.appendChild(item);
+      });
+    }
+
+    function renderDetails() {
+      const root = document.getElementById("details");
+      const selected = getProvinces().find((p) => provinceKey(p) === state.selectedProvinceKey) || null;
+
+      if (!selected) {
+        root.innerHTML = '<div class="empty">' + tr("pickCity") + '</div>';
+        return;
+      }
+
+      const winners = {
+        gasolineAmount: bestBrand(selected, "gasolineAmount"),
+        dieselAmount: bestBrand(selected, "dieselAmount"),
+        lpgAmount: bestBrand(selected, "lpgAmount")
+      };
+
+      const selectedBox = document.createElement("div");
+      selectedBox.className = "selected";
+      selectedBox.innerHTML = '<h3>' + selected.provinceName + ' (' + selected.provinceCode + ')</h3><p>' + tr("bestNote") + '</p>';
+
+      const table = document.createElement("table");
+      table.innerHTML =
+        '<thead><tr><th>' + tr("brand") + '</th><th>' + fuelLabel("gasolineAmount") + '</th><th>' + fuelLabel("dieselAmount") + '</th><th>' + fuelLabel("lpgAmount") + '</th></tr></thead><tbody></tbody>';
+
+      const tbody = table.querySelector("tbody");
+      state.brands.forEach((brand) => {
+        const g = getAmount(selected, brand, "gasolineAmount");
+        const d = getAmount(selected, brand, "dieselAmount");
+        const l = getAmount(selected, brand, "lpgAmount");
+        const row = document.createElement("tr");
+        row.innerHTML =
+          '<td>' + (BRAND_LABELS[brand] || brand) + '</td>' +
+          '<td>' + formatAmount(g) + (winners.gasolineAmount === brand ? '<span class="badge">' + tr("best") + '</span>' : '') + '</td>' +
+          '<td>' + formatAmount(d) + (winners.dieselAmount === brand ? '<span class="badge">' + tr("best") + '</span>' : '') + '</td>' +
+          '<td>' + formatAmount(l) + (winners.lpgAmount === brand ? '<span class="badge">' + tr("best") + '</span>' : '') + '</td>';
+        tbody.appendChild(row);
+      });
+
+      root.innerHTML = "";
+      root.appendChild(selectedBox);
+      root.appendChild(table);
+    }
+
+    function render() {
+      renderStaticText();
+      renderStamp();
+
+      const items = getVisibleItems();
+      if (!state.selectedProvinceKey && items[0]) {
+        state.selectedProvinceKey = provinceKey(items[0].province);
+      }
+
+      if (state.selectedProvinceKey && !getProvinces().find((p) => provinceKey(p) === state.selectedProvinceKey)) {
+        state.selectedProvinceKey = null;
+      }
+
+      renderStats(items);
+      renderList(items);
+      renderDetails();
+      renderHistory();
+
+      document.querySelectorAll("#fuelSeg button").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.fuel === state.selectedFuel);
+      });
+    }
+
+    function bindEvents() {
+      document.getElementById("search").addEventListener("input", (event) => {
+        state.query = String(event.target.value || "").toUpperCase();
+        render();
+      });
+
+      document.getElementById("languageSelect").addEventListener("change", (event) => {
+        state.lang = event.target.value;
+        render();
+      });
+
+      document.getElementById("sortSelect").addEventListener("change", (event) => {
+        state.sort = event.target.value;
+        render();
+      });
+
+      document.getElementById("brandSelect").addEventListener("change", (event) => {
+        state.selectedBrand = event.target.value;
+        state.historyPage = 1;
+        render();
+      });
+
+      document.getElementById("onlyComplete").addEventListener("change", (event) => {
+        state.onlyComplete = Boolean(event.target.checked);
+        render();
+      });
+
+      document.getElementById("snapshotSelect").addEventListener("change", (event) => {
+        state.snapshotIndex = parseInt(event.target.value, 10);
+        state.historyPage = 1;
+        render();
+      });
+
+      document.querySelectorAll("#fuelSeg button").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedFuel = button.dataset.fuel;
+          render();
+        });
+      });
+    }
+
+    function showFatal(error) {
+      console.error(error);
+      document.querySelector(".content").innerHTML = '<div class="panel"><div class="empty">' + tr("error") + '</div></div>';
+      document.getElementById("stamp").textContent = tr("noUpdate");
+    }
+
+    async function loadData() {
+      const [priceRes, histRes] = await Promise.all([
+        fetch(PRICE_DATA_URL + "?ts=" + Date.now()),
+        fetch(ALL_PRICES_URL + "?ts=" + Date.now()).catch(() => null)
+      ]);
+
+      if (!priceRes.ok) throw new Error("HTTP " + priceRes.status);
+
+      const payload = await priceRes.json();
+      const provinces = Array.isArray(payload) ? payload : (payload.provinces || []);
+      if (!Array.isArray(provinces) || !provinces.length) throw new Error("Invalid payload");
+
+      state.raw = payload;
+      state.provinces = provinces;
+      state.brands = Object.keys(provinces[0].prices || {});
+      state.selectedProvinceKey = provinceKey(provinces[0]);
+
+      if (histRes && histRes.ok) {
+        const histPayload = await histRes.json();
+        state.history = Array.isArray(histPayload) ? histPayload : [];
+      }
+
+      renderBrandOptions();
+      renderSnapshotOptions();
+      render();
+    }
+
+    document.getElementById("languageSelect").value = state.lang;
+    bindEvents();
+    renderStaticText();
+    loadData().catch(showFatal);
+  </script>
+</body>
+
+</html>
