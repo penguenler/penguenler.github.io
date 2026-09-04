@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>kowalski</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+  <header class="app-header">
+    <h1>kowalski</h1>
+    <!-- <p class="app-subtitle">-</p> -->
+  </header>
+
+  <main class="app-main">
+    <section class="map-panel">
+      <svg id="world-map" role="img" aria-label="Dünya haritası üzerinde medeniyetler"></svg>
+      <div id="milestone-banner" class="milestone-banner hidden"></div>
+      <div id="tooltip" class="tooltip hidden"></div>
+    </section>
+
+    <aside class="side-panel">
+      <h2>Bu Dönemde Aktif Olanlar</h2>
+      <ul id="active-list" class="active-list"></ul>
+
+      <h2>Bölge Renkleri</h2>
+      <ul id="legend-list" class="legend-list"></ul>
+
+      <h2>Dönüm Noktası Olayları</h2>
+      <ul id="events-legend" class="legend-list"></ul>
+    </aside>
+  </main>
+
+  <footer class="timeline-bar">
+    <button id="play-btn" class="play-btn" aria-label="Zaman içinde oynat">▶</button>
+
+    <div class="timeline-controls">
+      <div class="year-row">
+        <div id="year-display" class="year-display">MÖ 300.000</div>
+        <div id="era-display" class="era-display">Paleolitik Çağ</div>
+      </div>
+      <input id="year-slider" class="year-slider" type="range" min="0" max="1000" step="1" value="0">
+      <div class="timeline-ticks" aria-hidden="true">
+        <span>Homo sapiens</span>
+        <span>Göbekli Tepe</span>
+        <span>Antik Çağ</span>
+        <span>Orta Çağ</span>
+        <span>Günümüz</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="js/civilizations.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/timeline.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
